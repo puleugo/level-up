@@ -1,1 +1,0 @@
-{"version":3,"file":"board-profile.response.js","sourceRoot":"","sources":["../../../../../src/app/community/board/dto/board-profile.response.ts"],"names":[],"mappings":";;;AAGA,MAAa,oBAAoB;IAK/B,YAAY,KAAkC;QAC5C,IAAI,CAAC,EAAE,GAAG,KAAK,CAAC,EAAE,CAAC;QACnB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC,KAAK,CAAC;QACzB,IAAI,CAAC,WAAW,GAAG,KAAK,CAAC,WAAW,CAAC;IACvC,CAAC;CACF;AAVD,oDAUC"}

@@ -36,11 +36,11 @@ export class Todo implements MissionProperties {
   })
   status: TodoStatus;
 
-  @Column({ type: 'timestamp' })
-  startedAt: Date;
-
-  @Column({ type: 'timestamp' })
-  endedAt: Date;
+  // @Column({ type: 'timestamp' })
+  // startedAt: Date;
+  //
+  // @Column({ type: 'timestamp' })
+  // endedAt: Date;
 
   @ManyToOne(() => User, (user) => user.tasks)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })

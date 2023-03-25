@@ -14,8 +14,8 @@ export type MissionProperties = {
   userId: string;
   missionId: number;
   missionTitle?: string;
-  startedAt: Date;
-  endedAt: Date;
+  // startedAt: Date;
+  // endedAt: Date;
   status: TodoStatus;
   user: User;
   mission: Mission;

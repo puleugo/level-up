@@ -4,15 +4,19 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
-  Patch,
+  ParseIntPipe,
   Post,
+  Put,
   Query,
   Req,
-  Sse,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
 import { Request } from '@app/infrastructure/types/request.types';
@@ -22,11 +26,10 @@ import { MissionUpdateRequest } from '@app/todo/dto/mission/mission-update.reque
 import { TodoCreateRequest } from '@app/todo/dto/todo/todo-create.request';
 import { TodoProfileResponse } from '@app/todo/dto/todo/todo-profile.response';
 import { TodoUpdateRequest } from '@app/todo/dto/todo/todo-update.request';
-import { TodoAlarmService } from '@app/todo/todo-alarm.service';
 import { TodoService } from '@app/todo/todo.service';
 
-// @UseGuards(JwtAuthGuard)
-// @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags('[할일] 할일')
 @Controller()
 export class TodoController {
@@ -35,28 +38,24 @@ export class TodoController {
   ) {}
 
   @Get('missions')
-  async getTodosByDate(
+  @ApiOperation({ summary: '미션 조회' })
+  @ApiQuery({ name: 'startCursor', type: Date, required: false })
+  @ApiQuery({ name: 'endCursor', type: Date, required: false })
+  async getMissions(
     @Req() { user }: Request,
     @Query('startCursor') startCursor: Date,
     @Query('endCursor') endCursor: Date,
-  ): Promise<TodoProfileResponse[]> {
-    const todos = await this.todoService.getTodosByDate({
+  ): Promise<MissionProfileResponse[]> {
+    const missions = await this.todoService.getMissions({
       userId: user.id,
       startCursor,
       endCursor,
     });
-    return todos.map((todo) => new TodoProfileResponse(todo));
-  }
-
-  @Get('missions')
-  async getMissions(
-    @Req() { user }: Request,
-  ): Promise<MissionProfileResponse[]> {
-    const missions = await this.todoService.getMission(user.id);
     return missions.map((mission) => new MissionProfileResponse(mission));
   }
 
   @Post('missions')
+  @ApiOperation({ summary: '미션 생성' })
   async createMission(
     @Req() { user }: Request,
     @Body() missionCreateRequest: MissionCreateRequest,
@@ -68,10 +67,11 @@ export class TodoController {
     return new MissionProfileResponse(mission);
   }
 
-  @Patch('missions/:missionId')
+  @Put('missions/:missionId')
+  @ApiOperation({ summary: '미션 수정' })
   async updateMission(
     @Req() { user }: Request,
-    @Param('missionId') missionId: number,
+    @Param('missionId', ParseIntPipe) missionId: number,
     @Body() missionUpdateRequest: MissionUpdateRequest,
   ): Promise<MissionProfileResponse> {
     const mission = await this.todoService.updateMission({
@@ -83,6 +83,7 @@ export class TodoController {
   }
 
   @Delete('missions/:missionId')
+  @ApiOperation({ summary: '미션 삭제' })
   async deleteMission(
     @Req() { user }: Request,
     @Param('missionId') missionId: number,
@@ -94,6 +95,7 @@ export class TodoController {
   }
 
   @Get('missions/:missionId/todos')
+  @ApiOperation({ summary: '할일 조회' })
   async getTodo(
     @Req() { user }: Request,
     @Param('missionId') missionId: number,
@@ -105,23 +107,27 @@ export class TodoController {
     return todos.map((todo) => new TodoProfileResponse(todo));
   }
 
-  @Post('todos')
+  @Post('missions/:missionId/todos')
+  @ApiOperation({ summary: '할일 생성' })
   async createTodo(
     @Req() { user }: Request,
+    @Param('missionId', ParseIntPipe) missionId: number,
     @Body() todoCreateRequest: TodoCreateRequest,
   ): Promise<TodoProfileResponse> {
     const todo = await this.todoService.createTodo({
       userId: user.id,
+      missionId,
       ...todoCreateRequest,
     });
 
     return new TodoProfileResponse(todo);
   }
 
-  @Patch('todos/:todoId')
+  @Put('todos/:todoId')
+  @ApiOperation({ summary: '할일 수정' })
   async updateTodo(
     @Req() { user }: Request,
-    @Param('todoId') todoId: number,
+    @Param('todoId', ParseIntPipe) todoId: number,
     @Body() todoUpdateRequest: TodoUpdateRequest,
   ): Promise<TodoProfileResponse> {
     const todo = await this.todoService.updateTodo({
@@ -133,9 +139,10 @@ export class TodoController {
   }
 
   @Delete('todos/:todoId')
+  @ApiOperation({ summary: '할일 삭제' })
   async deleteTodo(
     @Req() { user }: Request,
-    @Param('todoId') todoId: number,
+    @Param('todoId', ParseIntPipe) todoId: number,
   ): Promise<void> {
     await this.todoService.deleteTodo({
       id: todoId,

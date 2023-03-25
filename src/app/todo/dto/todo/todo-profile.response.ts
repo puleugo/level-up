@@ -9,8 +9,19 @@ export class TodoProfileResponse implements TodoProfileResponseCommand {
   missionTitle: string;
   status: TodoStatus;
 
-  constructor(todo: TodoProfileResponseCommand) {
-    Object.assign(this, todo);
-    this.missionTitle = todo.missionTitle;
+  constructor({
+    id,
+    title,
+    description,
+    missionId,
+    missionTitle,
+    status,
+  }: TodoProfileResponseCommand) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.missionId = missionId;
+    this.missionTitle = missionTitle;
+    this.status = status;
   }
 }

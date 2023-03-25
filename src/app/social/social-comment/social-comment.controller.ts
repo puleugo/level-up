@@ -7,10 +7,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiExcludeController, ApiTags } from '@nestjs/swagger';
 
 import { SocialCommentService } from '@app/social/social-comment/social-comment.service';
 
 @Controller()
+@ApiExcludeController()
+@ApiTags('[커뮤니티] 소셜링 댓글')
 export class SocialCommentController {
   constructor(private readonly socialCommentService: SocialCommentService) {}
 

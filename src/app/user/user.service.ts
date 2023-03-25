@@ -91,8 +91,8 @@ export class UserService {
     }
   }
 
-  async findById(id: string, select?: FindOptionsSelect<User>) {
-    return await this.userRepository.findOne({ where: { id }, select });
+  async findById(id: string, relations?: FindOptionsRelations<User>) {
+    return await this.userRepository.findOne({ where: { id }, relations });
   }
 
   async findByUsername(username: string, select?: FindOptionsSelect<User>) {
@@ -145,8 +145,8 @@ export class UserService {
   async getUserDetailProfile(data: {
     userId: string;
   }): Promise<UserDetailProfileResponseCommand> {
-    const user = await this.findById(data.userId);
-
+    const user = await this.findById(data.userId, { profile: true });
+    console.log(user);
     return {
       id: user.id,
       nickname: user.nickname,

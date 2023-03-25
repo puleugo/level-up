@@ -13,10 +13,6 @@ type MissionInfo = {
   id: number;
 };
 
-type IsTeamInfo = {
-  isTeamAlarm: boolean;
-};
-
 export type MissionResponseCommand = Pick<
   MissionProperties,
   'id' | 'title' | 'teamId' | 'userId' | 'startedAt' | 'endedAt'
@@ -30,10 +26,9 @@ export type UserMissionResponseCommand = Pick<
 
 export type MissionCreateRequestCommand = Pick<
   MissionProperties,
-  'title' | 'startedAt' | 'endedAt' | 'userId' | 'repeatDay'
+  'title' | 'startedAt' | 'endedAt' | 'repeatDay'
 > &
-  Partial<Pick<MissionProperties, 'description'>> &
-  Pick<MissionProperties, 'team'>;
+  Partial<Pick<MissionProperties, 'description' | 'userId' | 'teamId'>>;
 
 export type MissionUpdateRequestCommand = Partial<MissionCreateRequestCommand> &
   MissionInfo;

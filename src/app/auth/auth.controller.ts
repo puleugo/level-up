@@ -1,3 +1,5 @@
+import * as process from 'process';
+
 import {
   BadRequestException,
   Body,
@@ -16,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -40,7 +43,10 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'API 호출에 필요한 회원의 기본 정보를 호출합니다.' })
+  @ApiOperation({
+    summary: 'API 호출에 필요한 회원의 기본 정보를 호출합니다.',
+    description: 'JWT ACCESS 토큰이 필요합니다.',
+  })
   @ApiBearerAuth()
   async getMyProfile(
     @Req() { userData }: Request,
@@ -52,7 +58,9 @@ export class AuthController {
   }
 
   @Post('login/kakao')
-  @ApiOperation({ summary: '카카오 로그인을 진행합니다.' })
+  @ApiOperation({
+    summary: '카카오 로그인을 진행합니다.',
+  })
   @ApiBody({ type: KakaoAuthRequest })
   @ApiResponse({
     type: TokenResponse,
@@ -112,6 +120,7 @@ export class AuthController {
   }
 
   @Get('test/:userId')
+  @ApiExcludeEndpoint(process.env.APP_URL !== 'http://localhost:3000')
   @ApiOperation({ summary: '로컬에서 테스트를 위한 토큰을 발급합니다.' })
   async getToken(
     @Param('userId', ParseUUIDPipe) userId: string,
@@ -120,10 +129,14 @@ export class AuthController {
   }
 
   @Get('google')
+  @ApiExcludeEndpoint()
   @UseGuards(AuthGuard('google'))
-  googleLogin() {}
+  googleLogin() {
+    return;
+  }
 
   @Get('google/callback')
+  @ApiExcludeEndpoint()
   @UseGuards(AuthGuard('google'))
   googleLoginCallback(@Req() req) {
     return req.user;

@@ -7,15 +7,15 @@ export enum TodoStatus {
   DONE = 'DONE',
 }
 
-export type MissionProperties = {
+export type TodoProperties = {
   id: number;
   title: string;
   description: string | null;
   userId: string;
   missionId: number;
   missionTitle?: string;
-  startedAt: Date;
-  endedAt: Date;
+  // startedAt: Date;
+  // endedAt: Date;
   status: TodoStatus;
   user: User;
   mission: Mission;

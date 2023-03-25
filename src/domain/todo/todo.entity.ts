@@ -1,19 +1,22 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { Mission } from '@domain/todo/mission.entity';
-import { MissionProperties, TodoStatus } from '@domain/todo/todo';
+import { TodoProperties, TodoStatus } from '@domain/todo/todo';
 import { User } from '@domain/user/user.entity';
 
 @Entity('todos')
 @Index(['userId', 'missionId'])
-export class Todo implements MissionProperties {
+export class Todo implements TodoProperties {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id: number;
 
@@ -36,17 +39,26 @@ export class Todo implements MissionProperties {
   })
   status: TodoStatus;
 
-  @Column({ type: 'timestamp' })
-  startedAt: Date;
-
-  @Column({ type: 'timestamp' })
-  endedAt: Date;
+  // @Column({ type: 'timestamp' })
+  // startedAt: Date;
+  //
+  // @Column({ type: 'timestamp' })
+  // endedAt: Date;
 
   @ManyToOne(() => User, (user) => user.tasks)
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Mission, (mission) => mission.todos)
-  @JoinColumn({ name: 'missionId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'mission_id', referencedColumnName: 'id' })
   mission: Mission;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt: Date | null;
 }

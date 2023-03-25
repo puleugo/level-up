@@ -7,7 +7,7 @@ export enum TodoStatus {
   DONE = 'DONE',
 }
 
-export type MissionProperties = {
+export type TodoProperties = {
   id: number;
   title: string;
   description: string | null;

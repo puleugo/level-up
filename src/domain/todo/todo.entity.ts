@@ -8,12 +8,12 @@ import {
 } from 'typeorm';
 
 import { Mission } from '@domain/todo/mission.entity';
-import { MissionProperties, TodoStatus } from '@domain/todo/todo';
+import { TodoProperties, TodoStatus } from '@domain/todo/todo';
 import { User } from '@domain/user/user.entity';
 
 @Entity('todos')
 @Index(['userId', 'missionId'])
-export class Todo implements MissionProperties {
+export class Todo implements TodoProperties {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
   id: number;
 

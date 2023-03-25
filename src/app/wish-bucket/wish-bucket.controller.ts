@@ -1,10 +1,12 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { ApiExcludeController } from '@nestjs/swagger';
 
 import { WishItemCreateRequest } from '@app/wish-bucket/dto/wish-item-create.request';
 import { WishItemProfileResponseCommand } from '@app/wish-bucket/wish-bucket.command';
 import { WishBucketService } from '@app/wish-bucket/wish-bucket.service';
 
 @Controller()
+@ApiExcludeController()
 export class WishBucketController {
   constructor(private readonly wishBucketService: WishBucketService) {}
 

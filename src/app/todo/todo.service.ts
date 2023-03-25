@@ -1,12 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  FindOptionsRelations,
-  FindOptionsWhere,
-  LessThan,
-  MoreThanOrEqual,
-  Repository,
-} from 'typeorm';
+import { FindOptionsRelations, FindOptionsWhere, Repository } from 'typeorm';
 
 import {
   MissionCreateRequestCommand,
@@ -15,7 +9,7 @@ import {
   MissionUpdateRequestCommand,
 } from '@app/todo/command/mission.command';
 import {
-  GetTodosByDateRequestQuery,
+  GetMissionsRequestCommand,
   TodoCreateRequestCommand,
   TodoDeleteRequestCommand,
   TodoProfileResponseCommand,
@@ -35,20 +29,29 @@ export class TodoService {
     private readonly userService: UserService,
   ) {}
 
-  async getTodosByDate(
-    getTasksByDateRequestQuery: GetTodosByDateRequestQuery,
-  ): Promise<TodoProfileResponseCommand[]> {
-    return await this.todoRepository.find({
+  async getMissions(
+    getMissionsRequestCommand: GetMissionsRequestCommand,
+  ): Promise<MissionResponseCommand[]> {
+    const { userId, startCursor, endCursor } = getMissionsRequestCommand;
+    if (startCursor && endCursor) {
+      console.log(startCursor, endCursor);
+      const query = this.missionRepository.createQueryBuilder('mission');
+
+      const missions = await query
+        .where('mission.userId = :userId', { userId })
+        .andWhere('mission.startedAt >= :startCursor', { startCursor })
+        .andWhere('mission.endedAt < :endCursor', { endCursor })
+        .orderBy('mission.startedAt', 'ASC')
+        .getMany();
+
+      console.log(missions, missions.length);
+      return missions;
+    }
+    return await this.missionRepository.find({
       where: {
-        userId: getTasksByDateRequestQuery.userId,
-        startedAt: MoreThanOrEqual(getTasksByDateRequestQuery.startCursor),
-        endedAt: LessThan(getTasksByDateRequestQuery.endCursor),
+        userId,
       },
     });
-  }
-
-  async getMission(userId: string): Promise<Mission[]> {
-    return await this.missionRepository.find({ where: { userId } });
   }
 
   async createMission(

@@ -25,8 +25,8 @@ import { TodoUpdateRequest } from '@app/todo/dto/todo/todo-update.request';
 import { TodoAlarmService } from '@app/todo/todo-alarm.service';
 import { TodoService } from '@app/todo/todo.service';
 
-// @UseGuards(JwtAuthGuard)
-// @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags('[할일] 할일')
 @Controller()
 export class TodoController {
@@ -35,24 +35,19 @@ export class TodoController {
   ) {}
 
   @Get('missions')
-  async getTodosByDate(
+  @ApiOperation({ summary: '미션 조회' })
+  @ApiQuery({ name: 'startCursor', type: Date, required: false })
+  @ApiQuery({ name: 'endCursor', type: Date, required: false })
+  async getMissions(
     @Req() { user }: Request,
     @Query('startCursor') startCursor: Date,
     @Query('endCursor') endCursor: Date,
-  ): Promise<TodoProfileResponse[]> {
-    const todos = await this.todoService.getTodosByDate({
+  ): Promise<MissionProfileResponse[]> {
+    const missions = await this.todoService.getMissions({
       userId: user.id,
       startCursor,
       endCursor,
     });
-    return todos.map((todo) => new TodoProfileResponse(todo));
-  }
-
-  @Get('missions')
-  async getMissions(
-    @Req() { user }: Request,
-  ): Promise<MissionProfileResponse[]> {
-    const missions = await this.todoService.getMission(user.id);
     return missions.map((mission) => new MissionProfileResponse(mission));
   }
 

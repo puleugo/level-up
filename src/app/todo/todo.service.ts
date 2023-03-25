@@ -58,23 +58,20 @@ export class TodoService {
     todoCreateRequest: MissionCreateRequestCommand,
   ): Promise<MissionResponseCommand> {
     const user = await this.userService.findById(todoCreateRequest.userId);
-    return await this.missionRepository.save({
-      ...todoCreateRequest,
-      user,
-    });
+    if (!todoCreateRequest.teamId) {
+      return await this.missionRepository.save({
+        ...todoCreateRequest,
+        user,
+      });
+    }
   }
 
   async updateMission(
     todoUpdateRequest: MissionUpdateRequestCommand,
   ): Promise<Mission> {
-    const user = await this.userService.findById(todoUpdateRequest.userId);
-    const todo = await this.findById(todoUpdateRequest.id, undefined, {
-      userId: user.id,
-    });
-    return await this.missionRepository.save({
-      ...todo,
-      ...todoUpdateRequest,
-    });
+    const mission = await this.findById(todoUpdateRequest.id);
+    Object.assign(mission, todoUpdateRequest);
+    return await this.missionRepository.save(mission);
   }
 
   async deleteMission(data: MissionDeleteRequestCommand) {
@@ -93,9 +90,10 @@ export class TodoService {
   }
 
   async createTodo(
-    todoTaskCreateRequest: TodoCreateRequestCommand,
+    todoCreateRequest: TodoCreateRequestCommand,
   ): Promise<TodoProfileResponseCommand> {
-    return await this.todoRepository.save({ ...todoTaskCreateRequest });
+    const user = await this.userService.findById(todoCreateRequest.userId);
+    return await this.todoRepository.save({ ...todoCreateRequest, user });
   }
 
   async updateTodo(
@@ -113,6 +111,7 @@ export class TodoService {
   ): Promise<void> {
     await this.todoRepository.softDelete({
       ...todoTaskDeleteRequest,
+      userId: todoTaskDeleteRequest.userId,
     });
   }
 

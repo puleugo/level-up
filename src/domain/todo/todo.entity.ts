@@ -43,10 +43,10 @@ export class Todo implements MissionProperties {
   // endedAt: Date;
 
   @ManyToOne(() => User, (user) => user.tasks)
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Mission, (mission) => mission.todos)
-  @JoinColumn({ name: 'missionId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'mission_id', referencedColumnName: 'id' })
   mission: Mission;
 }

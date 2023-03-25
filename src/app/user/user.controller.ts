@@ -1,20 +1,10 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
   ApiNotFoundResponse,
   ApiOperation,
-  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -61,6 +51,9 @@ export class UserController {
   }
 
   @Get('detail')
+  @ApiOperation({
+    summary: '사용자의 상세 정보를 조회합니다.',
+  })
   async getUserDetailProfile(
     @Req() { user }: Request,
   ): Promise<UserDetailProfileResponse> {

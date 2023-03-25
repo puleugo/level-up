@@ -1,10 +1,13 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { Mission } from '@domain/todo/mission.entity';
@@ -49,4 +52,13 @@ export class Todo implements TodoProperties {
   @ManyToOne(() => Mission, (mission) => mission.todos)
   @JoinColumn({ name: 'mission_id', referencedColumnName: 'id' })
   mission: Mission;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn({ nullable: true })
+  deletedAt: Date | null;
 }

@@ -8,12 +8,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { UserTeam } from '@domain/team/user-team.entity';
 import { Mission } from '@domain/todo/mission.entity';
 
 @Entity('teams')
 export class Team {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
+
+  @Column({ type: 'uuid' })
+  ownerId: string;
 
   @Column({ type: 'text' })
   title: string;
@@ -23,6 +27,9 @@ export class Team {
 
   @OneToMany(() => Mission, (todo) => todo.team)
   todos: Mission[];
+
+  @OneToMany(() => UserTeam, (userTeam) => userTeam.team)
+  userTeams: UserTeam[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -22,6 +22,7 @@ import { PostLike } from '@domain/post/post-like.entity';
 import { Post } from '@domain/post/post.entity';
 import { SocialGroupReportLogs } from '@domain/social/social-group-report-logs.entity';
 import { SocialGroupUser } from '@domain/social/social-group-user.entity';
+import { UserTeam } from '@domain/team/user-team.entity';
 import { Mission } from '@domain/todo/mission.entity';
 import { Todo } from '@domain/todo/todo.entity';
 import { UserProperties } from '@domain/user/user';
@@ -108,6 +109,9 @@ export class User implements UserProperties {
 
   @OneToMany(() => Todo, (toDoTask) => toDoTask.user)
   tasks: Todo[];
+
+  @OneToMany(() => UserTeam, (userTeam) => userTeam.user)
+  userTeams: UserTeam[];
 
   @CreateDateColumn()
   createdAt: Date;

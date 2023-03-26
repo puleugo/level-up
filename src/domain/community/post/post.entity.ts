@@ -9,11 +9,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Board } from '@domain/post/board.entity';
-import { PostProperties } from '@domain/post/post';
-import { PostComment } from '@domain/post/post-comment.entity';
-import { PostImage } from '@domain/post/post-image.entity';
-import { PostLike } from '@domain/post/post-like.entity';
+import { Board } from '@domain/community/board/board.entity';
+import { PostComment } from '@domain/community/comment/post-comment.entity';
+import { PostProperties } from '@domain/community/post/post';
+import { PostImage } from '@domain/community/post/post-image.entity';
+import { PostLike } from '@domain/community/post/post-like.entity';
 import { SocialGroupType } from '@domain/social/social-group';
 import { User } from '@domain/user/user.entity';
 

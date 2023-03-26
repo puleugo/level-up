@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Memoir } from '@domain/post/memoir.entity';
-import { Post } from '@domain/post/post.entity';
+import { Memoir } from '@domain/community/post/memoir.entity';
+import { Post } from '@domain/community/post/post.entity';
 
 @Entity('post_images')
 export class PostImage {

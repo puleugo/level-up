@@ -1,5 +1,5 @@
 import { UserProfileCommand } from '@app/user/user.commands';
-import { PostComment } from '@domain/post/post-comment.entity';
+import { PostComment } from '@domain/community/comment/post-comment.entity';
 
 export type PostCommentProfileResponseCommand = Pick<
   PostComment,

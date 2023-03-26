@@ -6,8 +6,8 @@ import {
   BoardCreateRequestCommand,
   BoardProfileResponseCommand,
 } from '@app/community/board/board.commands';
-import { Board } from '@domain/post/board.entity';
-import { Post } from '@domain/post/post.entity';
+import { Board } from '@domain/community/board/board.entity';
+import { Post } from '@domain/community/post/post.entity';
 
 @Injectable()
 export class BoardService {
@@ -17,6 +17,7 @@ export class BoardService {
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
   ) {}
+
   async getBoards(): Promise<Board[]> {
     return this.boardRepository.find();
   }

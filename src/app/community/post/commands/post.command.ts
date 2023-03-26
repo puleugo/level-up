@@ -1,5 +1,5 @@
 import { UserProfileCommand } from '@app/user/user.commands';
-import { PostProperties } from '@domain/post/post';
+import { PostProperties } from '@domain/community/post/post';
 import { SocialGroupType } from '@domain/social/social-group';
 
 type BoardInfo = { boardId: string };

@@ -4,7 +4,7 @@
 //
 // import { MockRepository } from '@app/infrastructure/utils/mockRepository';
 // import { SocialGroupBoardService } from '@app/social/social-board/social-group-board.service';
-// import { SocialGroupPostService } from '@app/social/social-post/social-group-post.service';
+// import { SocialGroupPostService } from '@app/social/social-community/social-group-community.service';
 // import { UserService } from '@app/user/user.service';
 // import { SocialGroupBoard } from '@domain/social/social-group-board.entity';
 // import { SocialGroupPlace } from '@domain/social/social-group-place.entity';

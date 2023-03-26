@@ -10,9 +10,9 @@ import {
 } from '@app/community/comment/commands';
 import { PostService } from '@app/community/post/post.service';
 import { UserService } from '@app/user/user.service';
+import { Board } from '@domain/community/board/board.entity';
+import { PostComment } from '@domain/community/comment/post-comment.entity';
 import { UserAccessDeniedException } from '@domain/errors/user.errors';
-import { Board } from '@domain/post/board.entity';
-import { PostComment } from '@domain/post/post-comment.entity';
 import { User } from '@domain/user/user.entity';
 
 @Injectable()

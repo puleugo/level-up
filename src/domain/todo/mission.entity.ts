@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Memoir } from '@domain/post/memoir.entity';
+import { Memoir } from '@domain/community/post/memoir.entity';
 import { Team } from '@domain/team/team.entity';
 import { MissionProperties, MissionStatus } from '@domain/todo/mission';
 import { Todo } from '@domain/todo/todo.entity';

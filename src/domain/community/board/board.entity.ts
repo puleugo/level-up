@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { PostType } from '@domain/post/post';
-import { Post } from '@domain/post/post.entity';
+import { PostType } from '@domain/community/post/post';
+import { Post } from '@domain/community/post/post.entity';
 
 @Entity('boards')
 export class Board {

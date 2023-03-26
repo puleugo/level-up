@@ -18,9 +18,9 @@ import { PostPreviewResponse } from '@app/community/post/dto/post-preview.respon
 import { PostProfileResponse } from '@app/community/post/dto/post-profile.response';
 import { Pagination } from '@app/infrastructure/types/pagination.types';
 import { UserService } from '@app/user/user.service';
-import { Board } from '@domain/post/board.entity';
-import { Memoir } from '@domain/post/memoir.entity';
-import { Post } from '@domain/post/post.entity';
+import { Board } from '@domain/community/board/board.entity';
+import { Memoir } from '@domain/community/post/memoir.entity';
+import { Post } from '@domain/community/post/post.entity';
 import { User } from '@domain/user/user.entity';
 
 @Injectable()

@@ -7,8 +7,8 @@ import {
   Unique,
 } from 'typeorm';
 
-import { PostLikeProperties } from '@domain/post/post';
-import { Post } from '@domain/post/post.entity';
+import { PostLikeProperties } from '@domain/community/post/post';
+import { Post } from '@domain/community/post/post.entity';
 import { User } from '@domain/user/user.entity';
 
 @Entity('post_likes')

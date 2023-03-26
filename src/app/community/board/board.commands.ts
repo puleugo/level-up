@@ -1,4 +1,4 @@
-import { Board } from '@domain/post/board.entity';
+import { Board } from '@domain/community/board/board.entity';
 
 export type BoardProfileResponseCommand = Pick<
   Board,

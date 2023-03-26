@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { PostCommentProperties } from '@domain/post/post';
-import { Post } from '@domain/post/post.entity';
+import { PostCommentProperties } from '@domain/community/post/post';
+import { Post } from '@domain/community/post/post.entity';
 import { User } from '@domain/user/user.entity';
 
 @Entity('post_comments')

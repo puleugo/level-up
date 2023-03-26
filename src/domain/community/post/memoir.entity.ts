@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { PostImage } from '@domain/post/post-image.entity';
+import { PostImage } from '@domain/community/post/post-image.entity';
 import { Mission } from '@domain/todo/mission.entity';
 import { User } from '@domain/user/user.entity';
 

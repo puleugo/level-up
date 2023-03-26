@@ -1,5 +1,5 @@
 import { BoardProfileResponseCommand } from '@app/community/board/board.commands';
-import { PostType } from '@domain/post/post';
+import { PostType } from '@domain/community/post/post';
 
 export class BoardProfileResponse implements BoardProfileResponseCommand {
   id: string;

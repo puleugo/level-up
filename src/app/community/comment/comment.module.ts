@@ -9,10 +9,10 @@ import { PostModule } from '@app/community/post/post.module';
 import { PostService } from '@app/community/post/post.service';
 import { UserModule } from '@app/user/user.module';
 import { UserService } from '@app/user/user.service';
-import { Board } from '@domain/post/board.entity';
-import { PostComment } from '@domain/post/post-comment.entity';
-import { PostImage } from '@domain/post/post-image.entity';
-import { Post } from '@domain/post/post.entity';
+import { Board } from '@domain/community/board/board.entity';
+import { PostComment } from '@domain/community/comment/post-comment.entity';
+import { PostImage } from '@domain/community/post/post-image.entity';
+import { Post } from '@domain/community/post/post.entity';
 
 @Module({
   imports: [

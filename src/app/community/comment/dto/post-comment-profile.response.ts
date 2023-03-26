@@ -1,6 +1,6 @@
 import { PostCommentProfileResponseCommand } from '@app/community/comment/commands';
 import { UserProfileResponse } from '@app/user/dto/user-profile.response';
-import { Post } from '@domain/post/post.entity';
+import { Post } from '@domain/community/post/post.entity';
 
 export class PostCommentProfileResponse
   implements PostCommentProfileResponseCommand
@@ -12,6 +12,7 @@ export class PostCommentProfileResponse
   parentComment: PostCommentProfileResponse | null;
   createdAt: Date;
   updatedAt: Date;
+
   constructor(comment: PostCommentProfileResponseCommand) {
     this.id = comment.id;
     this.content = comment.content;

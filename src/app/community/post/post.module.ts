@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { PostController } from './post.controller';
-import { PostService } from './post.service';
-
 import { BoardModule } from '@app/community/board/board.module';
+import { PostController } from '@app/community/post/post.controller';
+import { PostService } from '@app/community/post/post.service';
 import { UserModule } from '@app/user/user.module';
 import { Board } from '@domain/community/board/board.entity';
 import { PostComment } from '@domain/community/comment/post-comment.entity';

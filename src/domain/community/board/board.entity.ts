@@ -3,27 +3,33 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { PostType } from '@domain/community/post/post';
 import { Post } from '@domain/community/post/post.entity';
+import { Topic } from '@domain/topic/topic.entity';
 
 @Entity('boards')
 export class Board {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment', { type: 'int' })
   id: string;
 
-  @Column({ type: 'enum', enum: PostType })
-  title: PostType;
+  @Column({ type: 'varchar', unique: true })
+  title: string;
 
   @Column({ nullable: true })
   description: string | null;
 
   @OneToMany(() => Post, (post) => post)
   posts: Post[];
+
+  @OneToOne(() => Topic, (topic) => topic)
+  @JoinColumn({ name: 'title' })
+  topic: Topic;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -27,9 +27,3 @@ export type PostCommentProperties = {
   parentComment: PostCommentProperties;
   content: string;
 };
-
-export enum PostType {
-  QUESTION = '질문',
-  FREE = '자유',
-  MEMOIR = '회고록',
-}

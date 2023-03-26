@@ -1,9 +1,8 @@
 import { BoardProfileResponseCommand } from '@app/community/board/board.commands';
-import { PostType } from '@domain/community/post/post';
 
 export class BoardProfileResponse implements BoardProfileResponseCommand {
   id: string;
-  title: PostType;
+  title: string;
   description: string | null;
 
   constructor(board: BoardProfileResponseCommand) {

@@ -1,25 +1,31 @@
 import { PostPreviewResponseCommand } from '@app/community/post/commands/post.command';
 import { UserProfileResponse } from '@app/user/dto/user-profile.response';
-import { SocialGroupType } from '@domain/social/social-group';
 
 export class PostPreviewResponse implements PostPreviewResponseCommand {
-  id: string;
+  id: number;
   title: string;
   content: string;
   likeCount: number;
   commentCount: number;
   author: UserProfileResponse;
-  category: SocialGroupType[];
+  category: string;
   createdAt: Date;
 
-  constructor(post: PostPreviewResponseCommand) {
-    this.id = post.id;
-    this.title = post.title;
-    this.content = post.content;
-    this.likeCount = post.likeCount;
-    this.commentCount = post.commentCount;
-    this.author = new UserProfileResponse(post.author);
-    this.category = post.category;
-    this.createdAt = post.createdAt;
+  constructor({
+    id,
+    title,
+    content,
+    likeCount,
+    commentCount,
+    author,
+    createdAt,
+  }: PostPreviewResponseCommand) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.likeCount = likeCount;
+    this.commentCount = commentCount;
+    this.author = new UserProfileResponse(author);
+    this.createdAt = createdAt;
   }
 }

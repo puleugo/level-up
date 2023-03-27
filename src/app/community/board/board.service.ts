@@ -39,7 +39,7 @@ export class BoardService {
   }
 
   async updateBoard(data: {
-    boardId: string;
+    boardId: number;
     boardUpdateRequest: BoardCreateRequestCommand;
   }): Promise<BoardProfileResponseCommand> {
     const board = await this.boardRepository.findOne({
@@ -59,15 +59,14 @@ export class BoardService {
     return await this.boardRepository.findOne({ where: { id: board.id } });
   }
 
-  async deleteBoard(data: { boardId: string }): Promise<void> {
+  async deleteBoard(data: { boardId: number }): Promise<void> {
     await this.boardRepository.softDelete({ id: data.boardId });
     return;
   }
 
-  async findById(boardId: string): Promise<Board> {
+  async findById(boardId: number): Promise<Board> {
     return this.boardRepository.findOne({
       where: { id: boardId },
-      relations: ['posts'],
     });
   }
 }

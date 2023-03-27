@@ -1,9 +1,8 @@
 import { UserProfileCommand } from '@app/user/user.commands';
 import { PostProperties } from '@domain/community/post/post';
-import { SocialGroupType } from '@domain/social/social-group';
 
-type BoardInfo = { boardId: string };
-type PostInfo = { postId: string };
+type BoardInfo = { boardId: number };
+type PostInfo = { postId: number };
 type UserInfo = { userId: string };
 type ImagesInfo = { images: string[] };
 
@@ -18,7 +17,7 @@ export type PostCreateRequestCommand = Pick<
   PostProperties,
   'title' | 'content'
 >;
-export type PostUpdateRequestCommand = PostCreateRequestCommand;
+export type PostUpdateRequestCommand = Partial<PostCreateRequestCommand>;
 
 export type PostsResponse = {
   posts: {
@@ -29,23 +28,22 @@ export type PostsResponse = {
 };
 
 export type PostPreviewResponseCommand = {
-  id: string;
+  id: number;
   title: string;
   content: string;
   likeCount: number;
   commentCount: number;
-  category: SocialGroupType[];
   author: UserProfileCommand;
   createdAt: Date;
 };
 
 export type PostProfileResponseCommand = {
-  id: string;
+  id: number;
   title: string;
   content: string;
   likeCount: number;
   commentCount: number;
-  category: SocialGroupType[];
+  category?: string;
   author: UserProfileCommand;
   createdAt: Date;
 };

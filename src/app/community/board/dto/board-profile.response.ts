@@ -7,7 +7,7 @@ export class BoardProfileResponse implements BoardProfileResponseCommand {
     example: 1,
     description: '게시판 ID',
   })
-  id: string;
+  id: number;
 
   @ApiProperty({
     example: '창작',

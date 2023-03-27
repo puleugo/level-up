@@ -39,7 +39,7 @@ export class BoardController {
   @Put(':boardId')
   @ApiOperation({ summary: '게시판 수정' })
   async updateBoard(
-    @Param('boardId', ParseIntPipe) boardId: string,
+    @Param('boardId', ParseIntPipe) boardId: number,
     @Body() boardUpdateRequest: BoardUpdateRequest,
   ): Promise<BoardProfileResponse> {
     const board = await this.boardService.updateBoard({
@@ -52,7 +52,7 @@ export class BoardController {
   @Delete(':boardId')
   @ApiOperation({ summary: '게시판 삭제' })
   async deleteBoard(
-    @Param('boardId', ParseIntPipe) boardId: string,
+    @Param('boardId', ParseIntPipe) boardId: number,
   ): Promise<void> {
     await this.boardService.deleteBoard({ boardId });
     return;

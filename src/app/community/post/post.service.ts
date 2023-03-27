@@ -15,7 +15,6 @@ import {
   PostUpdateRequestCommand,
 } from '@app/community/post/commands/post.command';
 import { PostPreviewResponse } from '@app/community/post/dto/post-preview.response';
-import { PostProfileResponse } from '@app/community/post/dto/post-profile.response';
 import { Pagination } from '@app/infrastructure/types/pagination.types';
 import { UserService } from '@app/user/user.service';
 import { Board } from '@domain/community/board/board.entity';
@@ -38,7 +37,7 @@ export class PostService {
 
   async getPosts(
     data: PostListQuery,
-  ): Promise<Pagination<PostProfileResponse>> {
+  ): Promise<Pagination<PostPreviewResponse>> {
     const { items, meta } = await paginate(
       this.postRepository,
       {
@@ -60,26 +59,26 @@ export class PostService {
     };
   }
 
-  async getPostProfile(postId: string): Promise<PostProfileResponse> {
-    return;
+  async getPostProfile(postId: number): Promise<PostProfileResponseCommand> {
+    return await this.findById(postId);
   }
 
   async createPost(data: {
-    boardId: string;
+    boardId: number;
     author: User;
     postCreateRequest: PostCreateRequestCommand;
   }): Promise<PostProfileResponseCommand> {
-    const board = await this.boardService.findById(data.boardId);
-    const author = await this.userService.findById(data.author.id);
+    const { id: boardId } = await this.boardService.findById(data.boardId);
+    const { id: authorId } = await this.userService.findById(data.author.id);
     return await this.postRepository.save({
-      author,
-      board,
       ...data.postCreateRequest,
+      board: { id: boardId },
+      author: { id: authorId },
     });
   }
 
   async updatePost(data: {
-    postId: string;
+    postId: number;
     author: User;
     postUpdateRequest: PostUpdateRequestCommand;
   }): Promise<PostProfileResponseCommand> {
@@ -94,7 +93,7 @@ export class PostService {
     });
   }
 
-  async deletePost(data: { postId: string; author: User }): Promise<void> {
+  async deletePost(data: { postId: number; author: User }): Promise<void> {
     await this.postRepository.softDelete({
       id: data.postId,
       author: { id: data.author.id },
@@ -103,8 +102,8 @@ export class PostService {
   }
 
   async findById(
-    postId: string,
-    where?: FindOptionsWhere<PostProfileResponseCommand>,
+    postId: number,
+    where?: FindOptionsWhere<Post>,
   ): Promise<Post> {
     return await this.postRepository.findOne({
       where: { id: postId, ...where },

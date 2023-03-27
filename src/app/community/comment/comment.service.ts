@@ -28,7 +28,7 @@ export class CommentService {
   ) {}
 
   async getComments(data: {
-    postId: string;
+    postId: number;
   }): Promise<PostCommentProfileResponseCommand[]> {
     return await this.findCommentsByPostId(data.postId);
   }
@@ -36,7 +36,7 @@ export class CommentService {
   async createComment(data: {
     author: User;
     postCommentCreateRequest: PostCommentCreateRequestCommand;
-    postId: string;
+    postId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
 
@@ -49,7 +49,7 @@ export class CommentService {
   async createReply(data: {
     author: User;
     postCommentCreateRequest: PostCommentCreateRequestCommand;
-    postCommentId: string;
+    postCommentId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
     const comment = await this.findById(data.postCommentId);
@@ -63,7 +63,7 @@ export class CommentService {
   async updateComment(data: {
     author: User;
     postCommentUpdateRequest: PostCommentUpdateRequestCommand;
-    postCommentId: string;
+    postCommentId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
     const comment = await this.findById(data.postCommentId);
@@ -76,7 +76,7 @@ export class CommentService {
 
   async deleteComment(data: {
     author: User;
-    postCommentId: string;
+    postCommentId: number;
   }): Promise<void> {
     const author = await this.userService.findById(data.author.id);
     const comment = await this.findById(data.postCommentId);
@@ -86,13 +86,13 @@ export class CommentService {
     return;
   }
 
-  async findCommentsByPostId(postId: string): Promise<PostComment[]> {
+  async findCommentsByPostId(postId: number): Promise<PostComment[]> {
     return await this.postCommentRepository.find({
       where: { post: { id: postId } },
     });
   }
 
-  async findById(postCommentId: string): Promise<PostComment> {
+  async findById(postCommentId: number): Promise<PostComment> {
     return await this.postCommentRepository.findOne({
       where: { id: postCommentId },
     });

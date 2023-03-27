@@ -4,11 +4,11 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Req,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -26,7 +26,7 @@ export class CommentController {
 
   @Get('posts/:postId/comments')
   async getComments(
-    @Param('postId', ParseUUIDPipe) postId: string,
+    @Param('postId', ParseIntPipe) postId: number,
   ): Promise<PostCommentProfileResponse[]> {
     const postComments = await this.commentService.getComments({
       postId,
@@ -42,7 +42,7 @@ export class CommentController {
   async createComment(
     @Req() author: User,
     @Body() postCommentCreateRequest: PostCommentCreateRequest,
-    @Param('postId', ParseUUIDPipe) postId: string,
+    @Param('postId', ParseIntPipe) postId: number,
   ): Promise<PostCommentProfileResponse> {
     const createdPostComment = await this.commentService.createComment({
       author,
@@ -58,7 +58,7 @@ export class CommentController {
   async createReply(
     @Req() author: User,
     @Body() postCommentCreateRequest: PostCommentCreateRequest,
-    @Param('postCommentId', ParseUUIDPipe) postCommentId: string,
+    @Param('postCommentId', ParseIntPipe) postCommentId: number,
   ): Promise<PostCommentProfileResponse> {
     const postComment = await this.commentService.createReply({
       author,
@@ -72,7 +72,7 @@ export class CommentController {
   async updateComment(
     @Req() author: User,
     @Body() postCommentUpdateRequest: PostCommentUpdateRequest,
-    @Param('postCommentId', ParseUUIDPipe) postCommentId: string,
+    @Param('postCommentId', ParseIntPipe) postCommentId: number,
   ): Promise<PostCommentProfileResponse> {
     const postComment = await this.commentService.updateComment({
       author,
@@ -87,7 +87,7 @@ export class CommentController {
   @ApiBearerAuth()
   async deleteComment(
     @Req() author: User,
-    @Param('postCommentId', ParseUUIDPipe) postCommentId: string,
+    @Param('postCommentId', ParseIntPipe) postCommentId: number,
   ) {
     return await this.commentService.deleteComment({
       author,

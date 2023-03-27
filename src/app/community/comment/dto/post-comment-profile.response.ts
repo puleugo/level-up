@@ -5,7 +5,7 @@ import { Post } from '@domain/community/post/post.entity';
 export class PostCommentProfileResponse
   implements PostCommentProfileResponseCommand
 {
-  id: string;
+  id: number;
   content: string;
   author: UserProfileResponse;
   post: Post;

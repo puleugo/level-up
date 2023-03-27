@@ -8,6 +8,7 @@ import {
 } from '@app/community/board/board.commands';
 import { Board } from '@domain/community/board/board.entity';
 import { Post } from '@domain/community/post/post.entity';
+import { Topic } from '@domain/topic/topic.entity';
 
 @Injectable()
 export class BoardService {
@@ -16,6 +17,8 @@ export class BoardService {
     private readonly boardRepository: Repository<Board>,
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    @InjectRepository(Topic)
+    private readonly topicRepository: Repository<Topic>,
   ) {}
 
   async getBoards(): Promise<Board[]> {
@@ -25,7 +28,14 @@ export class BoardService {
   async createBoard(data: {
     boardCreateRequest: BoardCreateRequestCommand;
   }): Promise<BoardProfileResponseCommand> {
-    return await this.boardRepository.save({ ...data.boardCreateRequest });
+    const topic = await this.topicRepository.findOne({
+      where: { topic: data.boardCreateRequest.topic },
+    });
+
+    return await this.boardRepository.save({
+      ...data.boardCreateRequest,
+      topic,
+    });
   }
 
   async updateBoard(data: {
@@ -34,11 +44,19 @@ export class BoardService {
   }): Promise<BoardProfileResponseCommand> {
     const board = await this.boardRepository.findOne({
       where: { id: data.boardId },
+      relations: { topic: true },
     });
-    return await this.boardRepository.save({
-      ...board,
+
+    const topic = await this.topicRepository.findOne({
+      where: { topic: data.boardUpdateRequest.topic },
+    });
+
+    await this.boardRepository.update(board.id, {
       ...data.boardUpdateRequest,
+      topic,
     });
+
+    return await this.boardRepository.findOne({ where: { id: board.id } });
   }
 
   async deleteBoard(data: { boardId: string }): Promise<void> {

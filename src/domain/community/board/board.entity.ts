@@ -27,7 +27,9 @@ export class Board {
   @OneToMany(() => Post, (post) => post)
   posts: Post[];
 
-  @OneToOne(() => Topic, (topic) => topic)
+  @OneToOne(() => Topic, (topic) => topic, {
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'title' })
   topic: Topic;
 

@@ -15,7 +15,7 @@ import { User } from '@domain/user/user.entity';
 @Entity('post_comments')
 export class PostComment implements PostCommentProperties {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: number;
 
   @Column()
   content: string;

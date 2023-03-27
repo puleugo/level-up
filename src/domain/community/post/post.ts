@@ -1,7 +1,7 @@
 import { UserProperties } from '@domain/user/user';
 
 export type PostProperties = {
-  id: string;
+  id: number;
   title: string;
   content: string;
   author: UserProperties;
@@ -21,7 +21,7 @@ export type PostLikeProperties = {
 };
 
 export type PostCommentProperties = {
-  id: string;
+  id: number;
   author: UserProperties;
   post: PostProperties;
   parentComment: PostCommentProperties;

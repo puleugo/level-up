@@ -16,7 +16,7 @@ import { Topic } from '@domain/topic/topic.entity';
 @Entity('boards')
 export class Board {
   @PrimaryGeneratedColumn('increment', { type: 'int' })
-  id: string;
+  id: number;
 
   @Column({ type: 'varchar', unique: true })
   title: string;

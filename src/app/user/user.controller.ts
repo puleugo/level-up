@@ -12,7 +12,7 @@ import {
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
 import { Request } from '@app/infrastructure/types/request.types';
 import { MissionAlarmResponse } from '@app/todo/dto/mission/todo-alarm.response';
-import { UserTodoResponse } from '@app/todo/dto/mission/user-todo-response';
+import { UserMissionResponse } from '@app/todo/dto/mission/user-mission-response';
 import { UserAddressRequest } from '@app/user/dto/user-address.request';
 import { UserAddressResponse } from '@app/user/dto/user-address.response';
 import { UserDetailProfileResponse } from '@app/user/dto/user-profile-detail.response';
@@ -64,9 +64,11 @@ export class UserController {
   }
 
   @Get('progress')
-  async getMyProgress(@Req() { user }: Request): Promise<UserTodoResponse[]> {
+  async getMyProgress(
+    @Req() { user }: Request,
+  ): Promise<UserMissionResponse[]> {
     const toDos = await this.userService.findProgressById(user.id);
-    return toDos.map((todo) => new UserTodoResponse(todo));
+    return toDos.map((todo) => new UserMissionResponse(todo));
   }
 
   @Get('alarms')

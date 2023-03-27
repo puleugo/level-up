@@ -174,18 +174,17 @@ export class UserService {
   async findProgressById(
     userId: string,
   ): Promise<UserMissionResponseCommand[]> {
-    const userTodos = await this.findMissionsById(userId, {
-      missions: {
-        todos: true,
-      },
+    const userMissions = await this.findMissionsById(userId, {
+      todos: true,
     });
-    return userTodos.map((mission) => {
+    return userMissions.map((mission) => {
       const total = mission.todos.length;
       const completed = mission.todos.reduce((count, todo) => {
         return count + (todo.status === TodoStatus.DONE ? 1 : 0);
       }, 0);
       return {
         id: mission.id,
+        title: mission.title,
         teamId: mission.teamId,
         userId: mission.userId,
         startedAt: mission.startedAt,
@@ -197,12 +196,14 @@ export class UserService {
 
   async findMissionsById(
     userId: string,
-    relations?: FindOptionsRelations<User>,
+    relations?: FindOptionsRelations<Mission>,
   ): Promise<Mission[]> {
-    const { missions } = await this.userRepository.findOne({
-      where: { id: userId },
+    console.log(userId, relations);
+    const missions = await this.missionRepository.find({
+      where: { userId },
       relations,
     });
+    console.log(missions);
     return missions;
   }
 

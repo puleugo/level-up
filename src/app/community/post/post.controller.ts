@@ -26,8 +26,8 @@ import { PostCreateRequest } from '@app/community/post/dto/post-create.request';
 import { PostProfileResponse } from '@app/community/post/dto/post-profile.response';
 import { PostUpdateRequest } from '@app/community/post/dto/post-update.requests';
 import { PostService } from '@app/community/post/post.service';
-import { Pagination } from '@app/infrastructure/types/pagination.types';
-import { Request } from '@app/infrastructure/types/request.types';
+import { Pagination } from '@infrastructure/types/pagination.types';
+import { Request } from '@infrastructure/types/request.types';
 
 @ApiTags('[커뮤니티] 게시글')
 @Controller()

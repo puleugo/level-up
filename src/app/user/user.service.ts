@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
 
-import { Coord2addressClient } from '@app/infrastructure/types/coord2address.client';
 import {
   MissionAlarmResponseCommand,
   UserMissionResponseCommand,
@@ -25,6 +24,7 @@ import { UserProfile } from '@domain/user/user-profile.entity';
 import { UserSns } from '@domain/user/user-sns.entity';
 import { User } from '@domain/user/user.entity';
 import { WishItem } from '@domain/wish-bucket/wish-item.entity';
+import { Coord2addressClient } from '@infrastructure/types/coord2address.client';
 
 @Injectable()
 export class UserService {

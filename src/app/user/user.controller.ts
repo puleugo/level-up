@@ -10,7 +10,6 @@ import {
 } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
-import { Request } from '@app/infrastructure/types/request.types';
 import { MissionAlarmResponse } from '@app/todo/dto/mission/todo-alarm.response';
 import { UserMissionResponse } from '@app/todo/dto/mission/user-mission-response';
 import { UserAddressRequest } from '@app/user/dto/user-address.request';
@@ -19,6 +18,7 @@ import { UserDetailProfileResponse } from '@app/user/dto/user-profile-detail.res
 import { UserService } from '@app/user/user.service';
 import { AUTH_ERRORS } from '@domain/errors/auth.errors';
 import { USER_ERRORS } from '@domain/errors/user.errors';
+import { Request } from '@infrastructure/types/request.types';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()

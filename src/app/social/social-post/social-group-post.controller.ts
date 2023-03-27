@@ -27,8 +27,6 @@ import {
 } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
-import { Pagination } from '@app/infrastructure/types/pagination.types';
-import { Request } from '@app/infrastructure/types/request.types';
 import { SocialCreateRequest } from '@app/social/social-post/dto/social-create.request';
 import { SocialMemberProfileResponse } from '@app/social/social-post/dto/social-member-profile.response';
 import { SocialPreviewResponse } from '@app/social/social-post/dto/social-preview.response';
@@ -39,6 +37,8 @@ import { UserProfileResponse } from '@app/user/dto/user-profile.response';
 import { SOCIAL_ERRORS } from '@domain/errors/social.errors';
 import { USER_ERRORS } from '@domain/errors/user.errors';
 import { SocialGroupType } from '@domain/social/social-group';
+import { Pagination } from '@infrastructure/types/pagination.types';
+import { Request } from '@infrastructure/types/request.types';
 
 @Controller()
 @ApiExcludeController()

@@ -15,12 +15,12 @@ import {
   PostUpdateRequestCommand,
 } from '@app/community/post/commands/post.command';
 import { PostPreviewResponse } from '@app/community/post/dto/post-preview.response';
-import { Pagination } from '@app/infrastructure/types/pagination.types';
 import { UserService } from '@app/user/user.service';
 import { Board } from '@domain/community/board/board.entity';
 import { Memoir } from '@domain/community/post/memoir.entity';
 import { Post } from '@domain/community/post/post.entity';
 import { User } from '@domain/user/user.entity';
+import { Pagination } from '@infrastructure/types/pagination.types';
 
 @Injectable()
 export class PostService {

@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 
-import { KakaoAddressResponse } from '@app/infrastructure/types/kakao-address.reesonse';
 import { UserAddressUpdateRequestCommand } from '@app/user/user.commands';
 import { KakaoApiFailedException } from '@domain/errors/auth.errors';
+import { KakaoAddressResponse } from '@infrastructure/types/kakao-address.reesonse';
 
 export class Coord2addressClient {
   constructor(private readonly httpService: HttpService) {}

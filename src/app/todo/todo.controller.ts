@@ -19,7 +19,6 @@ import {
 } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
-import { Request } from '@app/infrastructure/types/request.types';
 import { MissionCreateRequest } from '@app/todo/dto/mission/mission-create.request';
 import { MissionProfileResponse } from '@app/todo/dto/mission/mission-profile.response';
 import { MissionUpdateRequest } from '@app/todo/dto/mission/mission-update.request';
@@ -27,6 +26,7 @@ import { TodoCreateRequest } from '@app/todo/dto/todo/todo-create.request';
 import { TodoProfileResponse } from '@app/todo/dto/todo/todo-profile.response';
 import { TodoUpdateRequest } from '@app/todo/dto/todo/todo-update.request';
 import { TodoService } from '@app/todo/todo.service';
+import { Request } from '@infrastructure/types/request.types';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()

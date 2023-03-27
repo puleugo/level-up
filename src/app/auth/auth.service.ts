@@ -9,13 +9,13 @@ import {
   UserRequestCommand,
 } from '@app/auth/commands/kakao.command';
 import { TokenResponse } from '@app/auth/dto/token.response';
+import { UserService } from '@app/user/user.service';
+import { InvalidTokenException } from '@domain/errors/auth.errors';
 import {
   JwtDecodedData,
   JwtSubjectType,
-} from '@app/infrastructure/types/jwt.types';
-import { Request } from '@app/infrastructure/types/request.types';
-import { UserService } from '@app/user/user.service';
-import { InvalidTokenException } from '@domain/errors/auth.errors';
+} from '@infrastructure/types/jwt.types';
+import { Request } from '@infrastructure/types/request.types';
 
 @Injectable()
 export class AuthService {

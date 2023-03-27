@@ -13,7 +13,7 @@ export type MissionProperties = {
   id: number;
   title: string;
   description: string | null;
-  userId: string;
+  userId: string | null;
   teamId: number | null;
   status: MissionStatus;
   user: User;

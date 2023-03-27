@@ -64,6 +64,9 @@ export class UserController {
   }
 
   @Get('progress')
+  @ApiOperation({
+    summary: '사용자의 미션 진척도 확인',
+  })
   async getMyProgress(
     @Req() { user }: Request,
   ): Promise<UserMissionResponse[]> {

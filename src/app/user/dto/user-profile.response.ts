@@ -9,11 +9,6 @@ export class UserProfileResponse implements UserProfileCommand {
   id: string;
 
   @ApiProperty({
-    description: '사용자 아이디',
-  })
-  username: string;
-
-  @ApiProperty({
     description: '사용자 닉네임',
   })
   nickname: string;
@@ -23,7 +18,9 @@ export class UserProfileResponse implements UserProfileCommand {
   })
   profileImageUrl: string | null;
 
-  constructor(data: UserProfileCommand) {
-    Object.assign(this, data);
+  constructor({ id, nickname, profileImageUrl }: UserProfileCommand) {
+    this.id = id;
+    this.nickname = nickname;
+    this.profileImageUrl = profileImageUrl;
   }
 }

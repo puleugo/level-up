@@ -12,7 +12,13 @@ import { PostService } from '@app/community/post/post.service';
 import { UserService } from '@app/user/user.service';
 import { Board } from '@domain/community/board/board.entity';
 import { PostComment } from '@domain/community/comment/post-comment.entity';
-import { UserAccessDeniedException } from '@domain/errors/user.errors';
+import { Post } from '@domain/community/post/post.entity';
+import { CommentNotFoundException } from '@domain/errors/community/comment/comment.errors';
+import { PostNotFoundException } from '@domain/errors/community/post/post.errors';
+import {
+  UserAccessDeniedException,
+  UserNotFoundException,
+} from '@domain/errors/user.errors';
 import { User } from '@domain/user/user.entity';
 
 @Injectable()
@@ -25,11 +31,18 @@ export class CommentService {
     private readonly postCommentRepository: Repository<PostComment>,
     @InjectRepository(Board)
     private readonly boardRepository: Repository<Board>,
+    @InjectRepository(Post)
+    private readonly postRepository: Repository<Post>,
   ) {}
 
   async getComments(data: {
     postId: number;
   }): Promise<PostCommentProfileResponseCommand[]> {
+    const postCnt = await this.postRepository.count({
+      where: { id: data.postId },
+    });
+    if (postCnt < 1) throw new PostNotFoundException();
+
     return await this.findCommentsByPostId(data.postId, {
       author: true,
     });
@@ -41,7 +54,9 @@ export class CommentService {
     postId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
+    if (!author) throw new UserAccessDeniedException();
     const post = await this.postService.findById(data.postId);
+    if (!post) throw new PostNotFoundException();
 
     return await this.postCommentRepository.save({
       author,
@@ -56,7 +71,9 @@ export class CommentService {
     postCommentId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
+    if (!author) throw new UserNotFoundException();
     const comment = await this.findById(data.postCommentId, { post: true });
+    if (!comment) throw new CommentNotFoundException();
     return await this.postCommentRepository.save({
       ...data.postCommentCreateRequest,
       author,
@@ -71,7 +88,9 @@ export class CommentService {
     postCommentId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
+    if (!author) throw new UserNotFoundException();
     const comment = await this.findById(data.postCommentId);
+    if (!comment) throw new CommentNotFoundException();
     if (comment.authorId !== author.id) throw new UserAccessDeniedException();
     return await this.postCommentRepository.save({
       ...comment,
@@ -84,7 +103,9 @@ export class CommentService {
     postCommentId: number;
   }): Promise<void> {
     const author = await this.userService.findById(data.author.id);
+    if (!author) throw new UserNotFoundException();
     const comment = await this.findById(data.postCommentId);
+    if (!comment) throw new CommentNotFoundException();
     if (comment.authorId !== author.id) throw new UserAccessDeniedException();
 
     await this.postCommentRepository.softDelete({ id: comment.id });

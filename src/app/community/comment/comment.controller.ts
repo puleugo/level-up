@@ -10,13 +10,22 @@ import {
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
 import { CommentService } from '@app/community/comment/comment.service';
 import { PostCommentCreateRequest } from '@app/community/comment/dto/post-comment-create.request';
 import { PostCommentProfileResponse } from '@app/community/comment/dto/post-comment-profile.response';
 import { PostCommentUpdateRequest } from '@app/community/comment/dto/post-comment-update.request';
+import { COMMENT_ERRORS } from '@domain/errors/community/comment/comment.errors';
+import { POST_ERRORS } from '@domain/errors/community/post/post.errors';
+import { USER_ERRORS } from '@domain/errors/user.errors';
 import { User } from '@domain/user/user.entity';
 
 @ApiTags('[커뮤니티] 댓글')
@@ -41,6 +50,11 @@ export class CommentController {
   @ApiOperation({ summary: '일반 댓글 작성' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [POST_ERRORS.POST_NOT_FOUND, USER_ERRORS.USER_NOT_FOUND].join(
+      ',',
+    ),
+  })
   async createComment(
     @Req() author: User,
     @Body() postCommentCreateRequest: PostCommentCreateRequest,
@@ -58,6 +72,12 @@ export class CommentController {
   @ApiOperation({ summary: '대댓글 작성' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [
+      USER_ERRORS.USER_NOT_FOUND,
+      COMMENT_ERRORS.COMMENT_NOT_FOUND,
+    ].join(','),
+  })
   async createReply(
     @Req() author: User,
     @Body() postCommentCreateRequest: PostCommentCreateRequest,
@@ -73,6 +93,17 @@ export class CommentController {
 
   @Patch('comments/:postCommentId')
   @ApiOperation({ summary: '댓글 수정' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [
+      USER_ERRORS.USER_NOT_FOUND,
+      COMMENT_ERRORS.COMMENT_NOT_FOUND,
+    ].join(','),
+  })
+  @ApiBadRequestResponse({
+    description: USER_ERRORS.USER_ACCESS_DENIED,
+  })
   async updateComment(
     @Req() author: User,
     @Body() postCommentUpdateRequest: PostCommentUpdateRequest,
@@ -90,6 +121,15 @@ export class CommentController {
   @ApiOperation({ summary: '댓글 삭제' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [
+      USER_ERRORS.USER_NOT_FOUND,
+      COMMENT_ERRORS.COMMENT_NOT_FOUND,
+    ].join(','),
+  })
+  @ApiBadRequestResponse({
+    description: USER_ERRORS.USER_ACCESS_DENIED,
+  })
   async deleteComment(
     @Req() author: User,
     @Param('postCommentId', ParseIntPipe) postCommentId: number,

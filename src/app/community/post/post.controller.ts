@@ -73,8 +73,14 @@ export class PostController {
   }
 
   @Post('posts/:postId/like')
-  async hitLike(): Promise<void> {
-    return await this.postService.hitLike();
+  @ApiOperation({ summary: '게시글 좋아요 클릭' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async hitLike(
+    @Param('postId', ParseIntPipe) postId: number,
+    @Req() { user: author }: Request,
+  ): Promise<void> {
+    return await this.postService.hitLike({ postId, userId: author.id });
   }
 
   @Put('posts/:postId')

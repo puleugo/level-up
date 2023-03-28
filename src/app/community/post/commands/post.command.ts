@@ -47,3 +47,5 @@ export type PostProfileResponseCommand = {
   author: UserProfileCommand;
   createdAt: Date;
 };
+
+export type PostLikeRequestCommand = UserInfo & PostInfo;

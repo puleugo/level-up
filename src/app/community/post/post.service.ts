@@ -10,6 +10,7 @@ import {
 } from '@app/community/post/commands/memoir.command';
 import {
   PostCreateRequestCommand,
+  PostLikeRequestCommand,
   PostListQuery,
   PostProfileResponseCommand,
   PostUpdateRequestCommand,
@@ -18,6 +19,7 @@ import { PostPreviewResponse } from '@app/community/post/dto/post-preview.respon
 import { UserService } from '@app/user/user.service';
 import { Board } from '@domain/community/board/board.entity';
 import { Memoir } from '@domain/community/post/memoir.entity';
+import { PostLike } from '@domain/community/post/post-like.entity';
 import { Post } from '@domain/community/post/post.entity';
 import { User } from '@domain/user/user.entity';
 import { Pagination } from '@infrastructure/types/pagination.types';
@@ -31,6 +33,8 @@ export class PostService {
     private readonly boardRepository: Repository<Board>,
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    @InjectRepository(PostLike)
+    private readonly postLikeRepository: Repository<PostLike>,
     @InjectRepository(Memoir)
     private readonly memoirRepository: Repository<Memoir>,
   ) {}
@@ -111,7 +115,26 @@ export class PostService {
     });
   }
 
-  async hitLike(): Promise<void> {
+  async hitLike(postLikeRequest: PostLikeRequestCommand): Promise<void> {
+    const { id: postId } = await this.findById(postLikeRequest.postId);
+    const { id: userId } = await this.userService.findById(
+      postLikeRequest.userId,
+    );
+    const postLike = await this.postLikeRepository.findOne({
+      where: { postId, userId },
+    });
+    if (!postLike) {
+      await Promise.all([
+        this.postRepository.increment({ id: postId }, 'likeCount', 1),
+        this.postLikeRepository.save({ postId, userId }),
+      ]);
+      return;
+    }
+
+    await Promise.all([
+      this.postRepository.decrement({ id: postId }, 'likeCount', 1),
+      this.postLikeRepository.delete({ postId, userId }),
+    ]);
     return;
   }
 

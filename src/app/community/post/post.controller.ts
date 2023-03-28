@@ -13,7 +13,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiQuery,
   ApiTags,
@@ -26,6 +28,9 @@ import { PostCreateRequest } from '@app/community/post/dto/post-create.request';
 import { PostProfileResponse } from '@app/community/post/dto/post-profile.response';
 import { PostUpdateRequest } from '@app/community/post/dto/post-update.requests';
 import { PostService } from '@app/community/post/post.service';
+import { BOARD_ERRORS } from '@domain/errors/community/board/board.errors';
+import { POST_ERRORS } from '@domain/errors/community/post/post.errors';
+import { USER_ERRORS } from '@domain/errors/user.errors';
 import { Pagination } from '@infrastructure/types/pagination.types';
 import { Request } from '@infrastructure/types/request.types';
 
@@ -38,6 +43,7 @@ export class PostController {
   @ApiOperation({ summary: '게시글 목록 조회' })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
+  @ApiNotFoundResponse({ description: BOARD_ERRORS.BOARD_NOT_FOUND })
   async getPosts(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
@@ -48,6 +54,7 @@ export class PostController {
 
   @Get('posts/:postId')
   @ApiOperation({ summary: '게시글 상세 조회' })
+  @ApiNotFoundResponse({ description: POST_ERRORS.POST_NOT_FOUND })
   async getPostProfile(
     @Param('postId', ParseIntPipe) postId: number,
   ): Promise<PostProfileResponse> {
@@ -59,6 +66,12 @@ export class PostController {
   @ApiOperation({ summary: '게시글 생성' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [
+      BOARD_ERRORS.BOARD_NOT_FOUND,
+      USER_ERRORS.USER_ACCESS_DENIED,
+    ].join(','),
+  })
   async createPost(
     @Param('boardId', ParseIntPipe) boardId: number,
     @Req() { user: author }: Request,
@@ -76,6 +89,11 @@ export class PostController {
   @ApiOperation({ summary: '게시글 좋아요 클릭' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [USER_ERRORS.USER_NOT_FOUND, POST_ERRORS.POST_NOT_FOUND].join(
+      ',',
+    ),
+  })
   async hitLike(
     @Param('postId', ParseIntPipe) postId: number,
     @Req() { user: author }: Request,
@@ -87,6 +105,12 @@ export class PostController {
   @ApiOperation({ summary: '게시글 수정' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [POST_ERRORS.POST_NOT_FOUND, USER_ERRORS.USER_NOT_FOUND].join(
+      ',',
+    ),
+  })
+  @ApiBadRequestResponse({ description: USER_ERRORS.USER_ACCESS_DENIED })
   async updatePost(
     @Param('postId', ParseIntPipe) postId: number,
     @Req() { user: author }: Request,
@@ -104,6 +128,12 @@ export class PostController {
   @ApiOperation({ summary: '게시글 삭제' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiNotFoundResponse({
+    description: [POST_ERRORS.POST_NOT_FOUND, USER_ERRORS.USER_NOT_FOUND].join(
+      ',',
+    ),
+  })
+  @ApiBadRequestResponse({ description: USER_ERRORS.USER_ACCESS_DENIED })
   async deletePost(
     @Param('postId', ParseIntPipe) postId: number,
     @Req() { user: author }: Request,

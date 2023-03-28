@@ -21,6 +21,12 @@ import { Board } from '@domain/community/board/board.entity';
 import { Memoir } from '@domain/community/post/memoir.entity';
 import { PostLike } from '@domain/community/post/post-like.entity';
 import { Post } from '@domain/community/post/post.entity';
+import { BoardNotFoundException } from '@domain/errors/community/board/board.errors';
+import { PostNotFoundException } from '@domain/errors/community/post/post.errors';
+import {
+  UserAccessDeniedException,
+  UserNotFoundException,
+} from '@domain/errors/user.errors';
 import { User } from '@domain/user/user.entity';
 import { Pagination } from '@infrastructure/types/pagination.types';
 
@@ -42,6 +48,9 @@ export class PostService {
   async getPosts(
     data: PostListQuery,
   ): Promise<Pagination<PostPreviewResponse>> {
+    const board = await this.boardService.findById(data.boardId);
+    if (!board) throw new BoardNotFoundException();
+
     const { items, meta } = await paginate(
       this.postRepository,
       {
@@ -50,7 +59,7 @@ export class PostService {
       },
       {
         where: {
-          board: { id: data.boardId },
+          board: { id: board.id },
         },
         relations: ['author', 'board'],
         order: { createdAt: 'DESC' },
@@ -64,7 +73,9 @@ export class PostService {
   }
 
   async getPostProfile(postId: number): Promise<PostProfileResponseCommand> {
-    return await this.findById(postId);
+    const post = await this.findById(postId);
+    if (!post) throw new PostNotFoundException();
+    return post;
   }
 
   async createPost(data: {
@@ -73,7 +84,10 @@ export class PostService {
     postCreateRequest: PostCreateRequestCommand;
   }): Promise<PostProfileResponseCommand> {
     const { id: boardId } = await this.boardService.findById(data.boardId);
+    if (!boardId) throw new BoardNotFoundException();
     const { id: authorId } = await this.userService.findById(data.author.id);
+    if (!authorId) throw new UserNotFoundException();
+
     return await this.postRepository.save({
       ...data.postCreateRequest,
       board: { id: boardId },
@@ -87,9 +101,12 @@ export class PostService {
     postUpdateRequest: PostUpdateRequestCommand;
   }): Promise<PostProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
-    const post = await this.findById(data.postId, {
-      author: { id: author.id },
-    });
+    if (!author) throw new UserNotFoundException();
+
+    const post = await this.findById(data.postId);
+    if (!post) throw new PostNotFoundException();
+
+    if (post.author.id !== author.id) throw new UserAccessDeniedException();
 
     return await this.postRepository.save({
       ...post,
@@ -98,10 +115,17 @@ export class PostService {
   }
 
   async deletePost(data: { postId: number; author: User }): Promise<void> {
-    await this.postRepository.softDelete({
+    const author = await this.userService.findById(data.author.id);
+    if (!author) throw new UserNotFoundException();
+    const post = await this.findById(data.postId);
+    if (!post) throw new PostNotFoundException();
+    if (post.author.id !== author.id) throw new UserAccessDeniedException();
+
+    const { affected } = await this.postRepository.softDelete({
       id: data.postId,
       author: { id: data.author.id },
     });
+    if (!affected) throw new PostNotFoundException();
     return;
   }
 
@@ -117,9 +141,11 @@ export class PostService {
 
   async hitLike(postLikeRequest: PostLikeRequestCommand): Promise<void> {
     const { id: postId } = await this.findById(postLikeRequest.postId);
+    if (!postId) throw new PostNotFoundException();
     const { id: userId } = await this.userService.findById(
       postLikeRequest.userId,
     );
+    if (!userId) throw new UserNotFoundException();
     const postLike = await this.postLikeRepository.findOne({
       where: { postId, userId },
     });

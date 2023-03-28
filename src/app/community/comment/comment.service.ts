@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsRelations, Repository } from 'typeorm';
 
 import { BoardService } from '@app/community/board/board.service';
 import {
@@ -30,7 +30,9 @@ export class CommentService {
   async getComments(data: {
     postId: number;
   }): Promise<PostCommentProfileResponseCommand[]> {
-    return await this.findCommentsByPostId(data.postId);
+    return await this.findCommentsByPostId(data.postId, {
+      author: true,
+    });
   }
 
   async createComment(data: {
@@ -39,9 +41,11 @@ export class CommentService {
     postId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
+    const post = await this.postService.findById(data.postId);
 
     return await this.postCommentRepository.save({
       author,
+      post,
       ...data.postCommentCreateRequest,
     });
   }
@@ -52,11 +56,12 @@ export class CommentService {
     postCommentId: number;
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
-    const comment = await this.findById(data.postCommentId);
+    const comment = await this.findById(data.postCommentId, { post: true });
     return await this.postCommentRepository.save({
-      author,
       ...data.postCommentCreateRequest,
-      parent: comment,
+      author,
+      parentComment: { id: comment.id },
+      post: comment.post,
     });
   }
 
@@ -67,7 +72,7 @@ export class CommentService {
   }): Promise<PostCommentProfileResponseCommand> {
     const author = await this.userService.findById(data.author.id);
     const comment = await this.findById(data.postCommentId);
-    if (comment.author.id !== author.id) throw new UserAccessDeniedException();
+    if (comment.authorId !== author.id) throw new UserAccessDeniedException();
     return await this.postCommentRepository.save({
       ...comment,
       ...data.postCommentUpdateRequest,
@@ -80,21 +85,30 @@ export class CommentService {
   }): Promise<void> {
     const author = await this.userService.findById(data.author.id);
     const comment = await this.findById(data.postCommentId);
-    if (comment.author.id !== author.id) throw new UserAccessDeniedException();
+    if (comment.authorId !== author.id) throw new UserAccessDeniedException();
 
     await this.postCommentRepository.softDelete({ id: comment.id });
     return;
   }
 
-  async findCommentsByPostId(postId: number): Promise<PostComment[]> {
+  async findCommentsByPostId(
+    postId: number,
+    relations?: FindOptionsRelations<PostComment>,
+  ): Promise<PostComment[]> {
     return await this.postCommentRepository.find({
       where: { post: { id: postId } },
+      relations,
+      order: { createdAt: 'ASC' },
     });
   }
 
-  async findById(postCommentId: number): Promise<PostComment> {
+  async findById(
+    postCommentId: number,
+    relations?: FindOptionsRelations<PostComment>,
+  ): Promise<PostComment> {
     return await this.postCommentRepository.findOne({
       where: { id: postCommentId },
+      relations,
     });
   }
 }

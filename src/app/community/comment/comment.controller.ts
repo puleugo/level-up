@@ -10,7 +10,7 @@ import {
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
 import { CommentService } from '@app/community/comment/comment.service';
@@ -25,6 +25,7 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Get('posts/:postId/comments')
+  @ApiOperation({ summary: '댓글 목록 조회' })
   async getComments(
     @Param('postId', ParseIntPipe) postId: number,
   ): Promise<PostCommentProfileResponse[]> {
@@ -37,6 +38,7 @@ export class CommentController {
   }
 
   @Post('posts/:postId/comments')
+  @ApiOperation({ summary: '일반 댓글 작성' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async createComment(
@@ -53,6 +55,7 @@ export class CommentController {
   }
 
   @Post('comments/:postCommentId')
+  @ApiOperation({ summary: '대댓글 작성' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async createReply(
@@ -69,6 +72,7 @@ export class CommentController {
   }
 
   @Patch('comments/:postCommentId')
+  @ApiOperation({ summary: '댓글 수정' })
   async updateComment(
     @Req() author: User,
     @Body() postCommentUpdateRequest: PostCommentUpdateRequest,
@@ -83,6 +87,7 @@ export class CommentController {
   }
 
   @Delete('comments/:postCommentId')
+  @ApiOperation({ summary: '댓글 삭제' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async deleteComment(

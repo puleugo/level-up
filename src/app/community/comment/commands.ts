@@ -3,10 +3,8 @@ import { PostComment } from '@domain/community/comment/post-comment.entity';
 
 export type PostCommentProfileResponseCommand = Pick<
   PostComment,
-  'id' | 'content' | 'post' | 'createdAt' | 'updatedAt'
-> & { author: UserProfileCommand } & {
-  parentComment: PostCommentProfileResponseCommand | null;
-};
+  'id' | 'content' | 'createdAt' | 'updatedAt' | 'parentCommentId' | 'postId'
+> & { author: UserProfileCommand };
 
 export type PostCommentCreateRequestCommand = Pick<PostComment, 'content'>;
 

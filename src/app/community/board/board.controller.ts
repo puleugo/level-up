@@ -8,12 +8,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { BoardService } from '@app/community/board/board.service';
 import { BoardCreateRequest } from '@app/community/board/dto/board-create.request';
 import { BoardProfileResponse } from '@app/community/board/dto/board-profile.response';
 import { BoardUpdateRequest } from '@app/community/board/dto/board-update.request';
+import { BOARD_ERRORS } from '@domain/errors/community/board/board.errors';
+import { TOPIC_ERRORS } from '@domain/errors/topic/topic.errors';
 
 @ApiTags('[커뮤니티] 게시판')
 @Controller('boards')
@@ -29,6 +31,7 @@ export class BoardController {
 
   @Post()
   @ApiOperation({ summary: '게시판 생성' })
+  @ApiNotFoundResponse({ description: TOPIC_ERRORS.TOPIC_NOT_FOUND })
   async createBoard(
     @Body() boardCreateRequest: BoardCreateRequest,
   ): Promise<BoardProfileResponse> {
@@ -38,6 +41,7 @@ export class BoardController {
 
   @Put(':boardId')
   @ApiOperation({ summary: '게시판 수정' })
+  @ApiNotFoundResponse({ description: BOARD_ERRORS.BOARD_NOT_FOUND })
   async updateBoard(
     @Param('boardId', ParseIntPipe) boardId: number,
     @Body() boardUpdateRequest: BoardUpdateRequest,
@@ -51,6 +55,7 @@ export class BoardController {
 
   @Delete(':boardId')
   @ApiOperation({ summary: '게시판 삭제' })
+  @ApiNotFoundResponse({ description: BOARD_ERRORS.BOARD_NOT_FOUND })
   async deleteBoard(
     @Param('boardId', ParseIntPipe) boardId: number,
   ): Promise<void> {

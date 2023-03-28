@@ -34,7 +34,7 @@ import { Request } from '@infrastructure/types/request.types';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Get('board/:boardId/posts')
+  @Get('boards/:boardId/posts')
   @ApiOperation({ summary: '게시글 목록 조회' })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
@@ -55,7 +55,7 @@ export class PostController {
     return new PostProfileResponse(post);
   }
 
-  @Post('board/:boardId/posts')
+  @Post('boards/:boardId/posts')
   @ApiOperation({ summary: '게시글 생성' })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

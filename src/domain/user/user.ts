@@ -2,7 +2,7 @@ import {
   PostCommentProperties,
   PostLikeProperties,
   PostProperties,
-} from '@domain/post/post';
+} from '@domain/community/post/post';
 import { SocialGroupMembersProperties } from '@domain/social/social-group';
 import { Mission } from '@domain/todo/mission.entity';
 import { WishItemProperties } from '@domain/wish-bucket/wish-bucket';

@@ -1,26 +1,47 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 import { PostCommentProfileResponseCommand } from '@app/community/comment/commands';
 import { UserProfileResponse } from '@app/user/dto/user-profile.response';
-import { Post } from '@domain/post/post.entity';
 
 export class PostCommentProfileResponse
   implements PostCommentProfileResponseCommand
 {
-  id: string;
+  @ApiProperty({ example: 1 })
+  id: number;
+
+  @ApiProperty({ example: '댓글 내용' })
   content: string;
-  author: UserProfileResponse;
-  post: Post;
-  parentComment: PostCommentProfileResponse | null;
+
+  @ApiProperty({ example: 2 })
+  postId: number;
+
+  @ApiProperty({ example: 2 })
+  parentCommentId: number | null;
+
+  @ApiProperty({ example: new Date() })
   createdAt: Date;
+
+  @ApiProperty({ example: new Date() })
   updatedAt: Date;
-  constructor(comment: PostCommentProfileResponseCommand) {
-    this.id = comment.id;
-    this.content = comment.content;
-    this.author = new UserProfileResponse(comment.author);
-    this.post = comment.post;
-    this.parentComment = comment.parentComment
-      ? new PostCommentProfileResponse(comment.parentComment)
-      : null;
-    this.createdAt = comment.createdAt;
-    this.updatedAt = comment.updatedAt;
+
+  @ApiProperty({ example: UserProfileResponse })
+  author: UserProfileResponse;
+
+  constructor({
+    id,
+    content,
+    author,
+    postId,
+    parentCommentId,
+    createdAt,
+    updatedAt,
+  }: PostCommentProfileResponseCommand) {
+    this.id = id;
+    this.content = content;
+    this.author = new UserProfileResponse({ ...author });
+    this.postId = postId;
+    this.parentCommentId = parentCommentId ? parentCommentId : null;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }

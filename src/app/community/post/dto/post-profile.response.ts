@@ -1,15 +1,31 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 import { PostProfileResponseCommand } from '@app/community/post/commands/post.command';
 import { UserProfileResponse } from '@app/user/dto/user-profile.response';
-import { SocialGroupType } from '@domain/social/social-group';
 
 export class PostProfileResponse implements PostProfileResponseCommand {
-  id: string;
+  @ApiProperty({ example: 1 })
+  id: number;
+
+  @ApiProperty({ example: '제목' })
   title: string;
+
+  @ApiProperty({ example: '내용' })
   content: string;
+
+  @ApiProperty({ example: 0 })
   likeCount: number;
+
+  @ApiProperty({ example: 0 })
   commentCount: number;
-  category: SocialGroupType[];
+
+  @ApiProperty({ example: '게시판 주제1' })
+  category: string;
+
+  @ApiProperty({ example: UserProfileResponse })
   author: UserProfileResponse;
+
+  @ApiProperty({ example: '2021-01-01T00:00:00.000Z' })
   createdAt: Date;
 
   constructor(post: PostProfileResponseCommand) {

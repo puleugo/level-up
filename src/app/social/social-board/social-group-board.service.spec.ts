@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { MockRepository } from '@app/infrastructure/utils/mockRepository';
 import { SocialGroupBoardService } from '@app/social/social-board/social-group-board.service';
 import { SocialGroupType } from '@domain/social/social-group';
 import { SocialGroupBoard } from '@domain/social/social-group-board.entity';
+import { MockRepository } from '@infrastructure/utils/mockRepository';
 
 class MockSocialGroupBoardRepository extends MockRepository<SocialGroupBoard> {
   constructor() {

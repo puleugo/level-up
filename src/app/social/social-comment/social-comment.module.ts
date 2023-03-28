@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { SocialCommentController } from './social-comment.controller';
-import { SocialCommentService } from './social-comment.service';
+import { SocialCommentController } from '@app/social/social-comment/social-comment.controller';
+import { SocialCommentService } from '@app/social/social-comment/social-comment.service';
 
 @Module({
-  providers: [SocialCommentService],
   controllers: [SocialCommentController],
+  providers: [SocialCommentService],
   exports: [SocialCommentService],
 })
 export class SocialCommentModule {}

@@ -2,8 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Coord2addressClient } from '@app/infrastructure/types/coord2address.client';
-import { MockRepository } from '@app/infrastructure/utils/mockRepository';
 import { UserService } from '@app/user/user.service';
 import { UserOauthType } from '@domain/user/oauth-type.entity';
 import { UserSNS } from '@domain/user/user';
@@ -11,15 +9,21 @@ import { UserAddress } from '@domain/user/user-address.entity';
 import { UserProfile } from '@domain/user/user-profile.entity';
 import { UserSns } from '@domain/user/user-sns.entity';
 import { User } from '@domain/user/user.entity';
+import { Coord2addressClient } from '@infrastructure/types/coord2address.client';
+import { MockRepository } from '@infrastructure/utils/mockRepository';
 
 class MockUserRepository extends MockRepository<User> {
   constructor() {
     super([]);
   }
 }
+
 class MockUserProfileRepository extends MockRepository<UserProfile> {}
+
 class MockUserAddressRepository extends MockRepository<UserAddress> {}
+
 class MockUserSnsRepository extends MockRepository<UserSns> {}
+
 class MockUserOauthTypeRepository extends MockRepository<UserOauthType> {}
 
 describe('AuthService', () => {

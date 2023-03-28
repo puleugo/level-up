@@ -1,4 +1,4 @@
-import { Memoir } from '@domain/post/memoir.entity';
+import { Memoir } from '@domain/community/post/memoir.entity';
 import { Team } from '@domain/team/team.entity';
 import { Todo } from '@domain/todo/todo.entity';
 import { User } from '@domain/user/user.entity';
@@ -13,7 +13,7 @@ export type MissionProperties = {
   id: number;
   title: string;
   description: string | null;
-  userId: string;
+  userId: string | null;
   teamId: number | null;
   status: MissionStatus;
   user: User;

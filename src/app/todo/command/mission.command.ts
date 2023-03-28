@@ -20,7 +20,7 @@ export type MissionResponseCommand = Pick<
 
 export type UserMissionResponseCommand = Pick<
   MissionProperties,
-  'id' | 'teamId' | 'userId' | 'startedAt'
+  'id' | 'title' | 'teamId' | 'userId' | 'startedAt'
 > &
   ProgressInfo;
 

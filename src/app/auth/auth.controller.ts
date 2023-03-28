@@ -28,10 +28,10 @@ import { AuthService } from '@app/auth/auth.service';
 import { KakaoAuthRequest } from '@app/auth/dto/kakao-auth.request';
 import { TokenResponse } from '@app/auth/dto/token.response';
 import { JwtAuthGuard } from '@app/auth/guards/jwt.guard';
-import { Request } from '@app/infrastructure/types/request.types';
 import { UserProfileResponse } from '@app/user/dto/user-profile.response';
 import { UserService } from '@app/user/user.service';
 import { UserSNS } from '@domain/user/user';
+import { Request } from '@infrastructure/types/request.types';
 
 @Controller('auth')
 @ApiTags('[인증] 인증')

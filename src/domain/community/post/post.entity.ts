@@ -3,30 +3,35 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Board } from '@domain/post/board.entity';
-import { PostProperties } from '@domain/post/post';
-import { PostComment } from '@domain/post/post-comment.entity';
-import { PostImage } from '@domain/post/post-image.entity';
-import { PostLike } from '@domain/post/post-like.entity';
-import { SocialGroupType } from '@domain/social/social-group';
+import { Board } from '@domain/community/board/board.entity';
+import { PostComment } from '@domain/community/comment/post-comment.entity';
+import { PostProperties } from '@domain/community/post/post';
+import { PostImage } from '@domain/community/post/post-image.entity';
+import { PostLike } from '@domain/community/post/post-like.entity';
 import { User } from '@domain/user/user.entity';
 
 @Entity('posts')
+@Index(['boardId'])
 export class Post implements PostProperties {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({ length: 50 })
   title: string;
 
   @Column()
   content: string;
+
+  @Column()
+  boardId: string;
 
   @Column({ type: 'int', nullable: true })
   toDoId: number | null;
@@ -49,10 +54,8 @@ export class Post implements PostProperties {
   @Column({ type: 'int', default: 0 })
   commentCount: number;
 
-  @Column('simple-array', { default: [] })
-  category: SocialGroupType[];
-
-  @ManyToOne(() => Board, (board) => board)
+  @ManyToOne(() => Board, (board) => board.posts)
+  @JoinColumn({ name: 'board_id', referencedColumnName: 'id' })
   board: Board;
 
   @OneToMany(() => PostImage, (postImage) => postImage)

@@ -1,6 +1,5 @@
 import {
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -33,7 +32,4 @@ export class PostLike implements PostLikeProperties {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date | null;
 }
